@@ -1,0 +1,37 @@
+name: Sync Fork
+
+on:
+  schedule:
+    # Runs this workflow every 6 hours
+    - cron: "0 */6 * * *"
+  workflow_dispatch: # Allows manual triggering of the workflow
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout your fork's repository
+      - name: Checkout Fork
+        uses: actions/checkout@v3
+        with:
+          ref: main # Replace 'main' with your default branch name
+
+      # Step 2: Add the original upstream repository as a remote
+      - name: Add Upstream Remote
+        run: |
+          git remote add upstream https://github.com/Mojang/bedrock-samples.git
+          git fetch upstream
+
+      # Step 3: Sync with the original repository
+      - name: Merge Upstream Changes
+        run: |
+          git checkout main # Replace 'main' with your default branch name
+          git merge upstream/main # Ensure the upstream branch matches your fork's default branch
+
+      # Step 4: Push changes back to your fork
+      - name: Push Changes to Fork
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git push origin main # Replace 'main' with your default branch name
