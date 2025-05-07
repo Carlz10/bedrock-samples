@@ -9,37 +9,33 @@ on:
 jobs:
   sync:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-  
-    - name: Set up Git identity
-      run: |
-        git config --global user.name "GitHub Actions Bot"
-        git config --global user.email "actions@github.com"
-
-
-  # Other steps in the workflow...
       # Step 1: Checkout your fork's repository
       - name: Checkout Fork
         uses: actions/checkout@v3
         with:
           ref: main # Replace 'main' with your default branch name
 
-      # Step 2: Add the original upstream repository as a remote
+      # Step 2: Set up Git identity
+      - name: Set up Git identity
+        run: |
+          git config --global user.name "GitHub Actions Bot"
+          git config --global user.email "actions@github.com"
+
+      # Step 3: Add the original upstream repository as a remote
       - name: Add Upstream Remote
         run: |
           git remote add upstream https://github.com/Mojang/bedrock-samples.git
           git fetch upstream
 
-      # Step 3: Sync with the original repository
+      # Step 4: Sync with the original repository
       - name: Merge Upstream Changes
         run: |
           git checkout main # Replace 'main' with your default branch name
           git merge upstream/main --allow-unrelated-histories 
-      
-      # Step 4: Push changes back to your fork
+
+      # Step 5: Push changes back to your fork
       - name: Push Changes to Fork
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
