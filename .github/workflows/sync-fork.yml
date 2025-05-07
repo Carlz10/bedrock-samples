@@ -3,7 +3,7 @@ name: Sync Fork
 on:
   schedule:
     # Runs this workflow every 6 hours
-    - cron: "0 */6 * * *"
+    - cron: "0 0 */3 * *"
   workflow_dispatch: # Allows manual triggering of the workflow
 
 jobs:
